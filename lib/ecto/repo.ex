@@ -380,7 +380,7 @@ defmodule Ecto.Repo do
         end
 
         def prepare_query(operation, query, opts), do: {query, opts}
-        defoverridable prepare_query: 3
+        defoverridable prepare_query: 3, transaction: 1, transaction: 2
       end
     end
   end
@@ -551,8 +551,8 @@ defmodule Ecto.Repo do
 
   ## Ecto.Adapter.Queryable
 
-  @optional_callbacks get: 3, get!: 3, get_by: 3, get_by!: 3, reload: 2, reload!: 2, aggregate: 3, 
-                      aggregate: 4, exists?: 2, one: 2, one!: 2, preload: 3, all: 2, stream: 2, 
+  @optional_callbacks get: 3, get!: 3, get_by: 3, get_by!: 3, reload: 2, reload!: 2, aggregate: 3,
+                      aggregate: 4, exists?: 2, one: 2, one!: 2, preload: 3, all: 2, stream: 2,
                       update_all: 3, delete_all: 2
 
   @doc """
@@ -693,7 +693,7 @@ defmodule Ecto.Repo do
   @doc """
   Similar to `c:reload/2`, but raises when something is not found.
 
-  When using with lists, ordering is guaranteed to be kept. 
+  When using with lists, ordering is guaranteed to be kept.
 
   ## Example
 
@@ -1186,15 +1186,15 @@ defmodule Ecto.Repo do
   By default, both Postgres and MySQL will return the number of entries
   inserted on `c:insert_all/3`. However, when the `:on_conflict` option
   is specified, Postgres and MySQL will return different results.
-  
+
   Postgres will only count a row if it was affected and will
   return 0 if no new entry was added.
-  
-  MySQL will return, at a minimum, the number of entries attempted. For example, 
+
+  MySQL will return, at a minimum, the number of entries attempted. For example,
   if `:on_conflict` is set to `:nothing`, MySQL will return
   the number of entries attempted to be inserted, even when no entry
-  was added. 
-  
+  was added.
+
   Also note that if `:on_conflict` is a query, MySQL will return
   the number of attempted entries plus the number of entries modified
   by the UPDATE query.
@@ -1584,9 +1584,9 @@ defmodule Ecto.Repo do
         MyRepo.update!(change(alice, balance: alice.balance - 10))
         MyRepo.update!(change(bob, balance: bob.balance + 10))
       end)
-      
+
       # When passing a function of arity 1, it receives the repository itself
-      MyRepo.transaction(fn repo -> 
+      MyRepo.transaction(fn repo ->
         repo.insert!(%Post{})
       end)
 
